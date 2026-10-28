@@ -17,6 +17,7 @@ jackson-module-kotlin = { module = "tools.jackson.module:jackson-module-kotlin" 
 
 kafka-clients = { module = "org.apache.kafka:kafka-clients" }
 slf4j-api = { module = "org.slf4j:slf4j-api" }
+testcontainers-kafka = { module = "org.testcontainers:testcontainers-kafka" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version = "5.5.1" }
 
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
