@@ -193,7 +193,7 @@ class SafeHttpClient(
         return Raw(response.code, headers, bytes, truncated)
     }
 
-    private fun translate(e: IOException): RuntimeException {
+    private fun translate(e: IOException): Exception {
         var cause: Throwable? = e
         while (cause != null) {
             if (cause is ScopeViolationException) return cause
