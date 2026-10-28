@@ -1,0 +1,301 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vulscan.local/schemas/finding-reported.v1.json",
+  "title": "FINDING_REPORTED message (schemaVersion 1)",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "messageId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "type": {
+      "const": "FINDING_REPORTED"
+    },
+    "correlationId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "finding": {
+          "type": "object",
+          "properties": {
+            "moduleType": {
+              "type": "string",
+              "enum": [
+                "XSS",
+                "SQLI",
+                "IDOR"
+              ]
+            },
+            "vulnType": {
+              "type": "string",
+              "enum": [
+                "XSS_REFLECTED",
+                "XSS_STORED",
+                "SQLI_ERROR_BASED",
+                "SQLI_BOOLEAN_BASED",
+                "SQLI_TIME_BASED",
+                "IDOR_HORIZONTAL",
+                "IDOR_VERTICAL"
+              ]
+            },
+            "cwe": {
+              "type": "string",
+              "pattern": "^CWE-[0-9]+$"
+            },
+            "endpointId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "method": {
+              "type": "string",
+              "enum": [
+                "GET",
+                "POST",
+                "PUT",
+                "PATCH",
+                "DELETE",
+                "HEAD"
+              ]
+            },
+            "url": {
+              "type": "string",
+              "minLength": 1
+            },
+            "parameter": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "location": {
+                  "type": "string",
+                  "enum": [
+                    "QUERY",
+                    "BODY_FORM",
+                    "BODY_JSON",
+                    "PATH",
+                    "HEADER",
+                    "COOKIE"
+                  ]
+                }
+              },
+              "required": [
+                "name",
+                "location"
+              ]
+            },
+            "verdict": {
+              "type": "string",
+              "enum": [
+                "SUSPECTED",
+                "LIKELY",
+                "CONFIRMED"
+              ]
+            },
+            "severity": {
+              "type": "string",
+              "enum": [
+                "INFO",
+                "LOW",
+                "MEDIUM",
+                "HIGH",
+                "CRITICAL"
+              ]
+            },
+            "confidence": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 99
+            },
+            "fingerprint": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1
+            },
+            "summary": {
+              "type": "string",
+              "minLength": 1
+            },
+            "recommendation": {
+              "type": "string",
+              "minLength": 1
+            },
+            "details": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "XSS_REFLECTED",
+                    "XSS_STORED",
+                    "SQLI_ERROR_BASED",
+                    "SQLI_BOOLEAN_BASED",
+                    "SQLI_TIME_BASED",
+                    "IDOR_HORIZONTAL",
+                    "IDOR_VERTICAL"
+                  ]
+                }
+              },
+              "required": [
+                "type"
+              ]
+            },
+            "evidence": {
+              "type": "object",
+              "properties": {
+                "request": {
+                  "type": "object",
+                  "properties": {
+                    "method": {
+                      "type": "string",
+                      "enum": [
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "PATCH",
+                        "DELETE",
+                        "HEAD"
+                      ]
+                    },
+                    "url": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "headers": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "bodyExcerpt": {
+                      "type": "string",
+                      "maxLength": 2048
+                    }
+                  },
+                  "required": [
+                    "method",
+                    "url"
+                  ]
+                },
+                "response": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer"
+                    },
+                    "headers": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "bodyExcerpt": {
+                      "type": "string",
+                      "maxLength": 2048
+                    },
+                    "highlights": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "start": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "end": {
+                            "type": "integer",
+                            "minimum": 1
+                          }
+                        },
+                        "required": [
+                          "start",
+                          "end"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                },
+                "observations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "key": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "key",
+                      "value"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "request"
+              ]
+            }
+          },
+          "required": [
+            "moduleType",
+            "vulnType",
+            "cwe",
+            "method",
+            "url",
+            "verdict",
+            "severity",
+            "confidence",
+            "fingerprint",
+            "title",
+            "summary",
+            "recommendation",
+            "details",
+            "evidence"
+          ]
+        }
+      },
+      "required": [
+        "jobId",
+        "attempt",
+        "finding"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "messageId",
+    "type",
+    "correlationId",
+    "occurredAt",
+    "payload"
+  ]
+}

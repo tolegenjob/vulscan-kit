@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vulscan.local/schemas/job-completed.v1.json",
+  "title": "JOB_COMPLETED message (schemaVersion 1)",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "messageId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "type": {
+      "const": "JOB_COMPLETED"
+    },
+    "correlationId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "findingsCount": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "requestsSent": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "durationMs": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "endpointsTested": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "endpointsSkipped": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "endpointId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "endpointId",
+                  "reason"
+                ]
+              }
+            },
+            "inconclusive": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "budgetExhausted": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "findingsCount",
+            "requestsSent",
+            "durationMs"
+          ]
+        }
+      },
+      "required": [
+        "jobId",
+        "attempt",
+        "stats"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "messageId",
+    "type",
+    "correlationId",
+    "occurredAt",
+    "payload"
+  ]
+}

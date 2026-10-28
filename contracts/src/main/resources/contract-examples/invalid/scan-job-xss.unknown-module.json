@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "messageId": "5b6c1f6e-0d2a-4a43-9d5e-1a8f2c3a7b10",
+  "type": "SCAN_JOB",
+  "correlationId": "c0a8f3d2-6a0e-4b7e-9d58-0c1f4f1e2a11",
+  "occurredAt": "2026-10-22T15:04:05Z",
+  "payload": {
+    "jobId": "8f0d6d3e-9b52-4f55-8d0e-4f6a2d9e7c01",
+    "scanId": "2c1e7a9a-3b18-4f6e-a4a0-6a9b8d1b5e22",
+    "moduleType": "CSRF",
+    "attempt": 1,
+    "deadlineAt": "2026-10-22T15:34:05Z",
+    "policyId": "a3f1d4c2-1f21-4a0e-8d11-9b0c7e5d6f33",
+    "target": {
+      "targetId": "7d9b0f5e-5a35-4b6c-b0aa-3c3e6e9a1d44",
+      "baseUrl": "http://lab-app:8080",
+      "allowedHosts": [
+        {
+          "host": "lab-app",
+          "ports": [
+            8080
+          ]
+        }
+      ]
+    },
+    "scope": {
+      "includePrefixes": [
+        "http://lab-app:8080/"
+      ],
+      "excludePrefixes": [
+        "http://lab-app:8080/logout"
+      ]
+    },
+    "limits": {
+      "maxRequests": 600,
+      "requestsPerSecond": 5,
+      "maxConcurrency": 2,
+      "httpTimeoutMs": 10000,
+      "maxResponseBytes": 1048576,
+      "maxDurationSec": 1800
+    },
+    "endpoints": [
+      {
+        "endpointId": "e1d0c4aa-4d5b-4b9b-8a3a-0f1d2e3c4b55",
+        "method": "GET",
+        "url": "http://lab-app:8080/xss/search",
+        "idempotent": true,
+        "parameters": [
+          {
+            "name": "q",
+            "location": "QUERY",
+            "sampleValue": "test"
+          }
+        ]
+      }
+    ],
+    "moduleOptions": {
+      "xss": {
+        "reflected": true,
+        "stored": false,
+        "browserVerification": false
+      }
+    }
+  }
+}

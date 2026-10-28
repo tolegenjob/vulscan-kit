@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "messageId": "91ab5c3d-2e4f-4a6b-9c7d-8e9f0a1b2c3d",
+  "type": "JOB_FAILED",
+  "correlationId": "c0a8f3d2-6a0e-4b7e-9d58-0c1f4f1e2a11",
+  "occurredAt": "2026-10-22T15:04:05Z",
+  "payload": {
+    "jobId": "8f0d6d3e-9b52-4f55-8d0e-4f6a2d9e7c01",
+    "attempt": 1,
+    "errorCode": "SCOPE_VIOLATION",
+    "message": "connect timeout after 3 attempts",
+    "retryable": true,
+    "stats": {
+      "findingsCount": 0,
+      "requestsSent": 9,
+      "durationMs": 31000
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "messageId": "0a0f3a2e-6d93-4c8f-b2b6-d1f7e0c4a903",
+  "type": "FINDING_REPORTED",
+  "correlationId": "c0a8f3d2-6a0e-4b7e-9d58-0c1f4f1e2a11",
+  "occurredAt": "2026-10-22T15:04:05Z",
+  "payload": {
+    "jobId": "8f0d6d3e-9b52-4f55-8d0e-4f6a2d9e7c01",
+    "attempt": 1,
+    "finding": {
+      "moduleType": "IDOR",
+      "vulnType": "IDOR_HORIZONTAL",
+      "cwe": "CWE-639",
+      "endpointId": "e1d0c4aa-4d5b-4b9b-8a3a-0f1d2e3c4b55",
+      "method": "GET",
+      "url": "http://lab-app:8080/api/orders/1001",
+      "parameter": {
+        "name": "id",
+        "location": "PATH"
+      },
+      "verdict": "LIKELY",
+      "severity": "MEDIUM",
+      "confidence": 78,
+      "fingerprint": "fa30d327af606a22ea64c9246f765012a415fbbe5f9042b2462dc16847885d78",
+      "title": "IDOR: bob reads alice's order",
+      "summary": "Описание находки.",
+      "recommendation": "Рекомендация по исправлению.",
+      "details": {
+        "type": "IDOR_HORIZONTAL",
+        "ownerLabel": "alice",
+        "attackerLabel": "bob",
+        "markersMatched": [
+          "$.ownerEmail"
+        ],
+        "markersTotal": 2,
+        "repeatConfirmed": true,
+        "anonymousStatus": 401
+      },
+      "evidence": {
+        "request": {
+          "method": "GET",
+          "url": "http://lab-app:8080/api/orders/1001?q=vsx4k2m9qpa7",
+          "headers": {
+            "Accept": "text/html",
+            "Cookie": "[REDACTED]"
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "Content-Type": "text/html;charset=UTF-8"
+          },
+          "bodyExcerpt": "<p>Results for vsx4k2m9qpa7<vsxtag id=vsx4k2m9qpa7></p>",
+          "highlights": [
+            {
+              "start": 13,
+              "end": 25
+            }
+          ]
+        },
+        "observations": [
+          {
+            "key": "reflectionCount",
+            "value": "1"
+          }
+        ]
+      }
+    }
+  }
+}

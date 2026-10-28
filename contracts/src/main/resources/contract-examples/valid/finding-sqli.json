@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "messageId": "0a0f3a2e-6d93-4c8f-b2b6-d1f7e0c4a902",
+  "type": "FINDING_REPORTED",
+  "correlationId": "c0a8f3d2-6a0e-4b7e-9d58-0c1f4f1e2a11",
+  "occurredAt": "2026-10-22T15:04:05Z",
+  "payload": {
+    "jobId": "8f0d6d3e-9b52-4f55-8d0e-4f6a2d9e7c01",
+    "attempt": 1,
+    "finding": {
+      "moduleType": "SQLI",
+      "vulnType": "SQLI_ERROR_BASED",
+      "cwe": "CWE-89",
+      "endpointId": "e1d0c4aa-4d5b-4b9b-8a3a-0f1d2e3c4b55",
+      "method": "GET",
+      "url": "http://lab-app:8080/sqli/error/products",
+      "parameter": {
+        "name": "id",
+        "location": "QUERY"
+      },
+      "verdict": "LIKELY",
+      "severity": "MEDIUM",
+      "confidence": 78,
+      "fingerprint": "987dd92fd080e0ef80a2310c8c9c4a40fc7d2cd89c10e2be841fff50f03b69d6",
+      "title": "SQL injection (error-based): parameter id",
+      "summary": "Описание находки.",
+      "recommendation": "Рекомендация по исправлению.",
+      "details": {
+        "type": "SQLI_ERROR_BASED",
+        "dbms": "POSTGRESQL",
+        "matchedSignature": "syntax error at or near",
+        "methodsConfirmed": [
+          "ERROR_BASED"
+        ]
+      },
+      "evidence": {
+        "request": {
+          "method": "GET",
+          "url": "http://lab-app:8080/sqli/error/products?q=vsx4k2m9qpa7",
+          "headers": {
+            "Accept": "text/html",
+            "Cookie": "[REDACTED]"
+          }
+        },
+        "response": {
+          "status": 200,
+          "headers": {
+            "Content-Type": "text/html;charset=UTF-8"
+          },
+          "bodyExcerpt": "<p>Results for vsx4k2m9qpa7<vsxtag id=vsx4k2m9qpa7></p>",
+          "highlights": [
+            {
+              "start": 13,
+              "end": 25
+            }
+          ]
+        },
+        "observations": [
+          {
+            "key": "reflectionCount",
+            "value": "1"
+          }
+        ]
+      }
+    }
+  }
+}

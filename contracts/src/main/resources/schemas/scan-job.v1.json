@@ -1,0 +1,488 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vulscan.local/schemas/scan-job.v1.json",
+  "title": "SCAN_JOB message (schemaVersion 1)",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "messageId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "type": {
+      "const": "SCAN_JOB"
+    },
+    "correlationId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "scanId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "moduleType": {
+          "type": "string",
+          "enum": [
+            "XSS",
+            "SQLI",
+            "IDOR"
+          ]
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "deadlineAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "policyId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "target": {
+          "type": "object",
+          "properties": {
+            "targetId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "baseUrl": {
+              "type": "string",
+              "minLength": 1
+            },
+            "allowedHosts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "host": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "ports": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "minItems": 1
+                  }
+                },
+                "required": [
+                  "host",
+                  "ports"
+                ]
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "targetId",
+            "baseUrl",
+            "allowedHosts"
+          ]
+        },
+        "scope": {
+          "type": "object",
+          "properties": {
+            "includePrefixes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1
+            },
+            "excludePrefixes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "includePrefixes"
+          ]
+        },
+        "limits": {
+          "type": "object",
+          "properties": {
+            "maxRequests": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "requestsPerSecond": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "maxConcurrency": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "httpTimeoutMs": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "maxResponseBytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "maxDurationSec": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "maxRequests",
+            "requestsPerSecond",
+            "maxConcurrency",
+            "httpTimeoutMs",
+            "maxResponseBytes",
+            "maxDurationSec"
+          ]
+        },
+        "endpoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "endpointId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "method": {
+                "type": "string",
+                "enum": [
+                  "GET",
+                  "POST",
+                  "PUT",
+                  "PATCH",
+                  "DELETE",
+                  "HEAD"
+                ]
+              },
+              "url": {
+                "type": "string",
+                "minLength": 1
+              },
+              "idempotent": {
+                "type": "boolean"
+              },
+              "parameters": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "location": {
+                      "type": "string",
+                      "enum": [
+                        "QUERY",
+                        "BODY_FORM",
+                        "BODY_JSON",
+                        "PATH",
+                        "HEADER",
+                        "COOKIE"
+                      ]
+                    },
+                    "sampleValue": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "location"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "endpointId",
+              "method",
+              "url",
+              "idempotent"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 200
+        },
+        "moduleOptions": {
+          "type": "object",
+          "properties": {
+            "xss": {
+              "type": "object",
+              "properties": {
+                "reflected": {
+                  "type": "boolean"
+                },
+                "stored": {
+                  "type": "boolean"
+                },
+                "browserVerification": {
+                  "type": "boolean"
+                },
+                "allowStore": {
+                  "type": "boolean"
+                },
+                "observeEndpointIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            },
+            "sqli": {
+              "type": "object",
+              "properties": {
+                "errorBased": {
+                  "type": "boolean"
+                },
+                "booleanBased": {
+                  "type": "boolean"
+                },
+                "timeBased": {
+                  "type": "boolean"
+                },
+                "dbmsHint": {
+                  "type": "string",
+                  "enum": [
+                    "POSTGRESQL",
+                    "MYSQL",
+                    "MSSQL",
+                    "ORACLE",
+                    "SQLITE"
+                  ]
+                }
+              }
+            },
+            "idor": {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "READ_ONLY"
+                  ]
+                },
+                "identities": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "identityId": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "label": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "role": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "identityId",
+                      "label",
+                      "role"
+                    ]
+                  },
+                  "minItems": 2
+                },
+                "resources": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "resourceId": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "endpointId": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "idParameter": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "location": {
+                            "type": "string",
+                            "enum": [
+                              "QUERY",
+                              "BODY_FORM",
+                              "BODY_JSON",
+                              "PATH",
+                              "HEADER",
+                              "COOKIE"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "location"
+                        ]
+                      },
+                      "idValue": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "ownerIdentityId": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "sensitivity": {
+                        "type": "string",
+                        "enum": [
+                          "LOW",
+                          "MEDIUM",
+                          "HIGH"
+                        ]
+                      },
+                      "ownerMarkers": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "access": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "identityId": {
+                              "type": "string",
+                              "format": "uuid"
+                            },
+                            "expected": {
+                              "type": "string",
+                              "enum": [
+                                "ALLOW",
+                                "DENY",
+                                "PUBLIC"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "identityId",
+                            "expected"
+                          ]
+                        },
+                        "minItems": 1
+                      }
+                    },
+                    "required": [
+                      "resourceId",
+                      "endpointId",
+                      "idParameter",
+                      "idValue",
+                      "ownerIdentityId",
+                      "sensitivity",
+                      "access"
+                    ]
+                  }
+                },
+                "sessionCheck": {
+                  "type": "object",
+                  "properties": {
+                    "endpointId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "expectStatus": {
+                      "type": "integer"
+                    },
+                    "identityMarker": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "endpointId",
+                    "expectStatus"
+                  ]
+                },
+                "discovery": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "endpointId": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "identityId": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "idJsonPath": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "endpointId",
+                      "identityId",
+                      "idJsonPath"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "identities",
+                "resources"
+              ]
+            }
+          },
+          "minProperties": 1,
+          "maxProperties": 1
+        }
+      },
+      "required": [
+        "jobId",
+        "scanId",
+        "moduleType",
+        "attempt",
+        "deadlineAt",
+        "policyId",
+        "target",
+        "scope",
+        "limits",
+        "endpoints",
+        "moduleOptions"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "messageId",
+    "type",
+    "correlationId",
+    "occurredAt",
+    "payload"
+  ]
+}

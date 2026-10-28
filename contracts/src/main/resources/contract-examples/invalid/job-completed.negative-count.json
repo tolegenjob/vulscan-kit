@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "messageId": "6d9a1c52-1b0e-4f3a-8d2c-7a9b0c1d2e3f",
+  "type": "JOB_COMPLETED",
+  "correlationId": "c0a8f3d2-6a0e-4b7e-9d58-0c1f4f1e2a11",
+  "occurredAt": "2026-10-22T15:04:05Z",
+  "payload": {
+    "jobId": "8f0d6d3e-9b52-4f55-8d0e-4f6a2d9e7c01",
+    "attempt": 1,
+    "stats": {
+      "findingsCount": -1,
+      "requestsSent": 212,
+      "durationMs": 338000,
+      "endpointsTested": 4,
+      "endpointsSkipped": [
+        {
+          "endpointId": "e1d0c4aa-4d5b-4b9b-8a3a-0f1d2e3c4b55",
+          "reason": "OUT_OF_SCOPE"
+        }
+      ],
+      "inconclusive": 1
+    }
+  }
+}

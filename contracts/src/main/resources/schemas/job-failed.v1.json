@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vulscan.local/schemas/job-failed.v1.json",
+  "title": "JOB_FAILED message (schemaVersion 1)",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "messageId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "type": {
+      "const": "JOB_FAILED"
+    },
+    "correlationId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "jobId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "attempt": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "errorCode": {
+          "type": "string",
+          "enum": [
+            "INVALID_JOB",
+            "SCOPE_VIOLATION",
+            "TARGET_UNREACHABLE",
+            "AUTH_FAILED",
+            "DEADLINE_EXCEEDED",
+            "INTERNAL_ERROR"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "retryable": {
+          "type": "boolean"
+        },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "findingsCount": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "requestsSent": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "durationMs": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "endpointsTested": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "endpointsSkipped": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "endpointId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "endpointId",
+                  "reason"
+                ]
+              }
+            },
+            "inconclusive": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "budgetExhausted": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "findingsCount",
+            "requestsSent",
+            "durationMs"
+          ]
+        }
+      },
+      "required": [
+        "jobId",
+        "attempt",
+        "errorCode",
+        "message",
+        "retryable"
+      ],
+      "if": {
+        "properties": {
+          "retryable": {
+            "const": true
+          }
+        },
+        "required": [
+          "retryable"
+        ]
+      },
+      "then": {
+        "properties": {
+          "errorCode": {
+            "type": "string",
+            "enum": [
+              "TARGET_UNREACHABLE",
+              "INTERNAL_ERROR"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "messageId",
+    "type",
+    "correlationId",
+    "occurredAt",
+    "payload"
+  ]
+}
