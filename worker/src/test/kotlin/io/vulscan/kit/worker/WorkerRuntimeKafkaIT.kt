@@ -42,7 +42,9 @@ class WorkerRuntimeKafkaIT {
 
     @BeforeEach
     fun setUp() {
-        assumeTrue(runCatching { DockerClientFactory.instance().isDockerAvailable }.getOrDefault(false), "Docker is not available")
+        val docker = runCatching { DockerClientFactory.instance().isDockerAvailable }.getOrDefault(false)
+        // В CI тест обязан выполняться, локально без Docker он пропускается
+        if (System.getenv("CI") == "true") check(docker) { "Docker is required in CI" } else assumeTrue(docker, "Docker is not available")
         kafka = KafkaContainer("apache/kafka:3.9.1").also { it.start() }
         core = HttpServer.create(InetSocketAddress(InetAddress.getByName("127.0.0.1"), 0), 0).also { server ->
             server.createContext("/internal/v1/jobs") { ex ->
