@@ -15,6 +15,10 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "maven-publish")
 
+    repositories {
+        mavenCentral()
+    }
+
     extensions.configure<KotlinJvmProjectExtension> {
         jvmToolchain(21)
     }
