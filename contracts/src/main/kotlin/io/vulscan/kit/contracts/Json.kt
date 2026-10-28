@@ -1,7 +1,7 @@
 package io.vulscan.kit.contracts
 
 import tools.jackson.databind.DeserializationFeature
-import tools.jackson.databind.SerializationFeature
+import tools.jackson.databind.cfg.DateTimeFeature
 import tools.jackson.databind.json.JsonMapper
 import tools.jackson.module.kotlin.KotlinModule
 
@@ -13,7 +13,7 @@ object Json {
     val mapper: JsonMapper = JsonMapper.builder()
         .addModule(KotlinModule.Builder().build())
         .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+        .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
         .build()
 
     fun write(value: Any): String = mapper.writeValueAsString(value)
