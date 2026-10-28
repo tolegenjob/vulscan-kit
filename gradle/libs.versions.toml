@@ -1,0 +1,26 @@
+# Единственное место, где зафиксированы версии. Версии Jackson, JUnit, AssertJ и др.
+# приходят из BOM Spring Boot (spring-boot-dependencies), поэтому здесь не указываются.
+# При смене spring-boot проверяйте базовую версию Kotlin по release notes Spring Boot.
+
+[versions]
+kotlin = "2.3.20"
+spring-boot = "4.1.1"
+json-schema-validator = "3.0.8"
+
+[libraries]
+spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
+
+# Jackson 3 (группа tools.jackson); аннотации остаются в com.fasterxml.jackson.annotation
+jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations" }
+jackson-databind = { module = "tools.jackson.core:jackson-databind" }
+jackson-module-kotlin = { module = "tools.jackson.module:jackson-module-kotlin" }
+
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+assertj-core = { module = "org.assertj:assertj-core" }
+
+# Не управляется BOM Spring Boot. Ветка 3.x работает на Jackson 3.
+json-schema-validator = { module = "com.networknt:json-schema-validator", version.ref = "json-schema-validator" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
