@@ -78,6 +78,16 @@ class JobExecutorTest {
     }
 
     @Test
+    fun `auth failed fails without retry and keeps the message`() {
+        run { throw AuthFailedException("both identities resolved to the same user") }
+        val failure = publisher.failed.single()
+        assertThat(failure.code).isEqualTo(JobErrorCode.AUTH_FAILED)
+        assertThat(failure.retryable).isFalse()
+        assertThat(failure.message).isEqualTo("both identities resolved to the same user")
+        assertThat(publisher.completed).isEmpty()
+    }
+
+    @Test
     fun `heartbeat reports tested endpoints`() {
         val core = FakeCore()
         run(core = core) { ctx ->

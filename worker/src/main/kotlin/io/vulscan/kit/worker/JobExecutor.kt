@@ -101,6 +101,8 @@ class JobExecutor(
             fail(job, correlationId, JobErrorCode.DEADLINE_EXCEEDED, "Job deadline exceeded", false, stats, http, started)
         } catch (e: InvalidJobException) {
             fail(job, correlationId, JobErrorCode.INVALID_JOB, e.message?.lineSequence()?.firstOrNull() ?: "Invalid job", false, stats, http, started)
+        } catch (e: AuthFailedException) {
+            fail(job, correlationId, JobErrorCode.AUTH_FAILED, e.message?.lineSequence()?.firstOrNull() ?: "Authentication failed", false, stats, http, started)
         } catch (e: ScopeViolationException) {
             fail(job, correlationId, JobErrorCode.SCOPE_VIOLATION, "Request was blocked by scope policy: ${e.reason}", false, stats, http, started)
         } catch (e: ProbeTimeoutException) {

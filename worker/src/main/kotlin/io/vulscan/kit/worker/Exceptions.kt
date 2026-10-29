@@ -16,3 +16,6 @@ class CoreUnavailableException(message: String, cause: Throwable? = null) : Runt
 
 /** Задание некорректно для данного модуля (например, ни одна проверка не включена). Приводит к JOB_FAILED(INVALID_JOB) без повтора. */
 class InvalidJobException(message: String) : RuntimeException(message)
+
+/** Аутентификация задания провалилась так, что продолжать нельзя (например, две тестовые идентичности совпали). Приводит к JOB_FAILED(AUTH_FAILED) без повтора. */
+class AuthFailedException(message: String) : RuntimeException(message)
