@@ -13,3 +13,6 @@ class LeaseLostException : JobAbortException("Lease lost")
 
 /** Core недоступен или ответил неожиданным кодом. */
 class CoreUnavailableException(message: String, cause: Throwable? = null) : RuntimeException(message, cause)
+
+/** Задание некорректно для данного модуля (например, ни одна проверка не включена). Приводит к JOB_FAILED(INVALID_JOB) без повтора. */
+class InvalidJobException(message: String) : RuntimeException(message)

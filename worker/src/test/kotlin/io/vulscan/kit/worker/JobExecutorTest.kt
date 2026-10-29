@@ -68,6 +68,27 @@ class JobExecutorTest {
     }
 
     @Test
+    fun `invalid job fails without retry and keeps the message`() {
+        run { throw InvalidJobException("no check is enabled") }
+        val failure = publisher.failed.single()
+        assertThat(failure.code).isEqualTo(JobErrorCode.INVALID_JOB)
+        assertThat(failure.retryable).isFalse()
+        assertThat(failure.message).isEqualTo("no check is enabled")
+        assertThat(publisher.completed).isEmpty()
+    }
+
+    @Test
+    fun `heartbeat reports tested endpoints`() {
+        val core = FakeCore()
+        run(core = core) { ctx ->
+            ctx.stats.endpointTested()
+            ctx.stats.endpointTested()
+            assertThat(ctx.stats.testedCount()).isEqualTo(2)
+        }
+        assertThat(publisher.completed.single().endpointsTested).isEqualTo(2)
+    }
+
+    @Test
     fun `scope violation fails the job without retry`() {
         run { throw ScopeViolationException(ScopeDenial.OUT_OF_SCOPE, "nope") }
         val failure = publisher.failed.single()

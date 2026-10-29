@@ -72,7 +72,7 @@ class JobExecutor(
             core, job.jobId, job.attempt,
             Duration.ofSeconds(claim.heartbeatIntervalSec.toLong().coerceAtLeast(1)),
             requestsSent = { http.requestsSent },
-            endpointsDone = { 0 },
+            endpointsDone = { stats.testedCount() },
         )
         wiring.heartbeat = heartbeat
 
@@ -99,6 +99,8 @@ class JobExecutor(
             log.warn("Job {} lost its lease", job.jobId)
         } catch (e: DeadlineExceededException) {
             fail(job, correlationId, JobErrorCode.DEADLINE_EXCEEDED, "Job deadline exceeded", false, stats, http, started)
+        } catch (e: InvalidJobException) {
+            fail(job, correlationId, JobErrorCode.INVALID_JOB, e.message?.lineSequence()?.firstOrNull() ?: "Invalid job", false, stats, http, started)
         } catch (e: ScopeViolationException) {
             fail(job, correlationId, JobErrorCode.SCOPE_VIOLATION, "Request was blocked by scope policy: ${e.reason}", false, stats, http, started)
         } catch (e: ProbeTimeoutException) {

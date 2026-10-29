@@ -35,6 +35,8 @@ class MutableJobStats {
         tested.incrementAndGet()
     }
 
+    fun testedCount(): Int = tested.get()
+
     fun inconclusive() {
         inconclusiveCount.incrementAndGet()
     }
